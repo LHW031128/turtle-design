@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TURTLE 파트너 워크스페이스 · 화면 보기</title>
+<link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+<style>
+@font-face{font-family:"Pretendard Variable";src:url(assets/fonts/PretendardVariable.woff2) format("woff2-variations"),url(assets/fonts/PretendardVariable.woff2) format("woff2");font-weight:45 920;font-style:normal;font-display:swap}
+:root{--accent:#1f3a5f;--ink:#15181e;--sub:#5b6370;--faint:#8a919c;--line:#e2e5ea;--bg:#f5f6f8;--card:#ffffff}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic",sans-serif;color:var(--ink);background:var(--bg);word-break:keep-all;-webkit-font-smoothing:antialiased;line-height:1.5}
+a{color:inherit}
+.wrap{max-width:1240px;margin:0 auto;padding:0 24px}
+.brand{display:inline-flex;align-items:center;gap:10px;font-weight:700;font-size:15px;text-decoration:none}
+.brand img{width:26px;height:26px;display:block}
+.ghlink{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;text-decoration:none;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:var(--card)}
+.ghlink:hover{border-color:var(--ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+body{background:#e9ecf0}
+.bar{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:12px;height:60px;padding:0 16px;background:rgba(255,255,255,.96);border-bottom:1px solid var(--line);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.back{flex:0 0 auto;font-size:13.5px;font-weight:600;text-decoration:none;padding:8px 10px;border-radius:8px}
+.back:hover{background:var(--bg)}
+.info{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;line-height:1.3}
+.grp{font-size:11.5px;font-weight:700;color:var(--accent)}
+.ttl{font-size:14.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ctrl{flex:0 0 auto;display:flex;align-items:center;gap:6px}
+.count{font-size:12px;color:var(--faint);margin-right:4px;font-variant-numeric:tabular-nums}
+.ctrl button,.ctrl a{display:inline-flex;align-items:center;justify-content:center;min-width:40px;height:40px;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:#fff;font:inherit;font-size:13px;font-weight:600;color:var(--ink);text-decoration:none;cursor:pointer}
+.ctrl button:hover,.ctrl a:hover{border-color:var(--ink)}
+.ctrl button:disabled{opacity:.35;cursor:default;border-color:var(--line)}
+.stage{display:flex;justify-content:center;padding:28px 16px 64px}
+.frame{position:relative;overflow:hidden;background:#fff;box-shadow:0 16px 48px rgba(21,24,30,.14)}
+.frame iframe{position:absolute;left:0;top:0;border:0;display:block;transform-origin:0 0;background:#fff}
+.hint{text-align:center;font-size:12px;color:var(--faint);margin:-40px 0 40px}
+@media (max-width:620px){.ctrl .count,.ctrl .open{display:none}.bar{gap:8px;padding:0 10px}.back{padding:8px 6px}.hint{display:none}}
+</style>
+</head>
+<body>
+<header class="bar">
+<a class="back" href="./">← 전체 화면</a>
+<div class="info"><span class="grp"></span><strong class="ttl"></strong></div>
+<div class="ctrl"><span class="count"></span><button type="button" class="prev" aria-label="이전 화면">‹</button><button type="button" class="next" aria-label="다음 화면">›</button><a class="open" target="_blank" rel="noopener">새 탭</a></div>
+</header>
+<main class="stage"><div class="frame"><iframe title="디자인 화면"></iframe></div></main>
+<p class="hint">화면 안의 버튼과 메뉴를 누르면 연결된 화면으로 이동해요 · 키보드 ← → 로 순서대로 넘겨 볼 수 있어요</p>
+<script>
+const SCREENS = [{"id":"D-Login","t":"01 로그인","g":"데스크톱 1440","w":1440,"h":1232,"r":0},{"id":"D-Login-Help","t":"02 로그인 도움말","g":"데스크톱 1440","w":1440,"h":900,"r":0},{"id":"D-Dashboard","t":"03 대시보드","g":"데스크톱 1440","w":1440,"h":1653,"r":0},{"id":"D-Dashboard-Detail","t":"04 캠페인 상세 드로어","g":"데스크톱 1440","w":1440,"h":900,"r":0},{"id":"D-Dashboard-Account","t":"05 계정 메뉴","g":"데스크톱 1440","w":1440,"h":900,"r":0},{"id":"D-Intake","t":"06 캠페인 접수","g":"데스크톱 1440","w":1440,"h":2252,"r":0},{"id":"D-Intake-Notice","t":"07 캠페인 접수 · 서비스 안내","g":"데스크톱 1440","w":1440,"h":900,"r":0},{"id":"D-IntakeForm","t":"08 개별 접수","g":"데스크톱 1440","w":1440,"h":1212,"r":0},{"id":"D-Bulk","t":"09 엑셀 대량 접수","g":"데스크톱 1440","w":1440,"h":900,"r":0},{"id":"D-Campaigns","t":"10 캠페인 관리 · 일정 관리","g":"데스크톱 1440","w":1440,"h":1333,"r":0},{"id":"D-Campaigns-Reward","t":"11 캠페인 관리 · 리워드 관리","g":"데스크톱 1440","w":1440,"h":1332,"r":0},{"id":"D-Campaigns-Inflow","t":"12 캠페인 관리 · 유입플 관리","g":"데스크톱 1440","w":1440,"h":1332,"r":0},{"id":"D-Campaigns-Refund","t":"13 캠페인 관리 · 환불·수정 관리","g":"데스크톱 1440","w":1440,"h":900,"r":0},{"id":"D-Campaigns-History","t":"14 캠페인 관리 · 운영이력","g":"데스크톱 1440","w":1440,"h":1405,"r":0},{"id":"D-Campaigns-Slots","t":"15 캠페인 관리 · 슬롯 관리","g":"데스크톱 1440","w":1440,"h":1601,"r":0},{"id":"D-Campaigns-Detail","t":"16 캠페인 상세 드로어","g":"데스크톱 1440","w":1440,"h":900,"r":0},{"id":"D-Settlements","t":"17 정산 관리 · 계정별 집계","g":"데스크톱 1440","w":1440,"h":1048,"r":0},{"id":"D-Settlements-Intake","t":"18 정산 관리 · 접수 상세","g":"데스크톱 1440","w":1440,"h":1048,"r":0},{"id":"D-Settlements-Refund","t":"19 정산 관리 · 환불 상세","g":"데스크톱 1440","w":1440,"h":960,"r":0},{"id":"D-Tax","t":"20 세금계산서 · 발행 신청","g":"데스크톱 1440","w":1440,"h":900,"r":0},{"id":"D-Tax-History","t":"21 세금계산서 · 발행 내역","g":"데스크톱 1440","w":1440,"h":900,"r":0},{"id":"D-Accounts","t":"22 계정 관리","g":"데스크톱 1440","w":1440,"h":900,"r":0},{"id":"D-Products","t":"23 상품 관리 · 상품 목록","g":"데스크톱 1440","w":1440,"h":1270,"r":0},{"id":"D-Products-Schedule","t":"24 상품 관리 · 운영 일정","g":"데스크톱 1440","w":1440,"h":1494,"r":0},{"id":"D-Products-Notice","t":"25 상품 관리 · 운영 공지","g":"데스크톱 1440","w":1440,"h":900,"r":0},{"id":"D-Notices","t":"26 공지사항","g":"데스크톱 1440","w":1440,"h":900,"r":0},{"id":"D-Notices-Detail","t":"27 공지 상세","g":"데스크톱 1440","w":1440,"h":900,"r":0},{"id":"D-Profile","t":"28 내 정보","g":"데스크톱 1440","w":1440,"h":900,"r":0},{"id":"D-Admin","t":"29 어드민","g":"데스크톱 1440","w":1440,"h":1728,"r":0},{"id":"D-Guide","t":"30 파트너 이용 가이드","g":"데스크톱 1440","w":1440,"h":900,"r":0},{"id":"D-Logout","t":"31 로그아웃 확인","g":"데스크톱 1440","w":1440,"h":900,"r":0},{"id":"D-Components","t":"32 토큰 · 공통 컴포넌트","g":"데스크톱 1440","w":1440,"h":5752,"r":0},{"id":"T-Login","t":"01 로그인","g":"태블릿 768","w":768,"h":1232,"r":0},{"id":"T-Login-Help","t":"02 로그인 도움말","g":"태블릿 768","w":768,"h":1024,"r":0},{"id":"T-Dashboard","t":"03 대시보드","g":"태블릿 768","w":768,"h":2353,"r":0},{"id":"T-Dashboard-Detail","t":"04 캠페인 상세 드로어","g":"태블릿 768","w":768,"h":1024,"r":0},{"id":"T-Dashboard-Account","t":"05 계정 메뉴","g":"태블릿 768","w":768,"h":1024,"r":0},{"id":"T-Intake","t":"06 캠페인 접수","g":"태블릿 768","w":768,"h":2349,"r":0},{"id":"T-Intake-Notice","t":"07 캠페인 접수 · 서비스 안내","g":"태블릿 768","w":768,"h":1024,"r":0},{"id":"T-IntakeForm","t":"08 개별 접수","g":"태블릿 768","w":768,"h":1712,"r":0},{"id":"T-Bulk","t":"09 엑셀 대량 접수","g":"태블릿 768","w":768,"h":1024,"r":0},{"id":"T-Campaigns","t":"10 캠페인 관리 · 일정 관리","g":"태블릿 768","w":768,"h":1524,"r":0},{"id":"T-Campaigns-Reward","t":"11 캠페인 관리 · 리워드 관리","g":"태블릿 768","w":768,"h":1478,"r":0},{"id":"T-Campaigns-Inflow","t":"12 캠페인 관리 · 유입플 관리","g":"태블릿 768","w":768,"h":1478,"r":0},{"id":"T-Campaigns-Refund","t":"13 캠페인 관리 · 환불·수정 관리","g":"태블릿 768","w":768,"h":1024,"r":0},{"id":"T-Campaigns-History","t":"14 캠페인 관리 · 운영이력","g":"태블릿 768","w":768,"h":1694,"r":0},{"id":"T-Campaigns-Slots","t":"15 캠페인 관리 · 슬롯 관리","g":"태블릿 768","w":768,"h":1808,"r":0},{"id":"T-Campaigns-Detail","t":"16 캠페인 상세 드로어","g":"태블릿 768","w":768,"h":1024,"r":0},{"id":"T-Settlements","t":"17 정산 관리 · 계정별 집계","g":"태블릿 768","w":768,"h":1239,"r":0},{"id":"T-Settlements-Intake","t":"18 정산 관리 · 접수 상세","g":"태블릿 768","w":768,"h":1239,"r":0},{"id":"T-Settlements-Refund","t":"19 정산 관리 · 환불 상세","g":"태블릿 768","w":768,"h":1151,"r":0},{"id":"T-Tax","t":"20 세금계산서 · 발행 신청","g":"태블릿 768","w":768,"h":1024,"r":0},{"id":"T-Tax-History","t":"21 세금계산서 · 발행 내역","g":"태블릿 768","w":768,"h":1024,"r":0},{"id":"T-Accounts","t":"22 계정 관리","g":"태블릿 768","w":768,"h":1024,"r":0},{"id":"T-Products","t":"23 상품 관리 · 상품 목록","g":"태블릿 768","w":768,"h":1333,"r":0},{"id":"T-Products-Schedule","t":"24 상품 관리 · 운영 일정","g":"태블릿 768","w":768,"h":2108,"r":0},{"id":"T-Products-Notice","t":"25 상품 관리 · 운영 공지","g":"태블릿 768","w":768,"h":1024,"r":0},{"id":"T-Notices","t":"26 공지사항","g":"태블릿 768","w":768,"h":1024,"r":0},{"id":"T-Notices-Detail","t":"27 공지 상세","g":"태블릿 768","w":768,"h":1024,"r":0},{"id":"T-Profile","t":"28 내 정보","g":"태블릿 768","w":768,"h":1057,"r":0},{"id":"T-Admin","t":"29 어드민","g":"태블릿 768","w":768,"h":1851,"r":0},{"id":"T-Guide","t":"30 파트너 이용 가이드","g":"태블릿 768","w":768,"h":1024,"r":0},{"id":"T-Logout","t":"31 로그아웃 확인","g":"태블릿 768","w":768,"h":1024,"r":0},{"id":"T-Components","t":"32 토큰 · 공통 컴포넌트","g":"태블릿 768","w":768,"h":6181,"r":0},{"id":"M-Login","t":"01 로그인","g":"모바일 390","w":390,"h":1202,"r":0},{"id":"M-Login-Help","t":"02 로그인 도움말","g":"모바일 390","w":390,"h":844,"r":0},{"id":"M-Dashboard","t":"03 대시보드","g":"모바일 390","w":390,"h":3298,"r":0},{"id":"M-Dashboard-Detail","t":"04 캠페인 상세 드로어","g":"모바일 390","w":390,"h":844,"r":0},{"id":"M-Dashboard-Account","t":"05 계정 메뉴","g":"모바일 390","w":390,"h":844,"r":0},{"id":"M-Nav-Drawer","t":"06 메뉴 드로어","g":"모바일 390","w":390,"h":844,"r":0},{"id":"M-Intake","t":"07 캠페인 접수","g":"모바일 390","w":390,"h":3714,"r":0},{"id":"M-Intake-Notice","t":"08 캠페인 접수 · 서비스 안내","g":"모바일 390","w":390,"h":844,"r":0},{"id":"M-IntakeForm","t":"09 개별 접수","g":"모바일 390","w":390,"h":1688,"r":0},{"id":"M-Bulk","t":"10 엑셀 대량 접수","g":"모바일 390","w":390,"h":1007,"r":0},{"id":"M-Campaigns","t":"11 캠페인 관리 · 일정 관리","g":"모바일 390","w":390,"h":1999,"r":0},{"id":"M-Campaigns-Reward","t":"12 캠페인 관리 · 리워드 관리","g":"모바일 390","w":390,"h":1945,"r":0},{"id":"M-Campaigns-Inflow","t":"13 캠페인 관리 · 유입플 관리","g":"모바일 390","w":390,"h":1945,"r":0},{"id":"M-Campaigns-Refund","t":"14 캠페인 관리 · 환불·수정 관리","g":"모바일 390","w":390,"h":1493,"r":0},{"id":"M-Campaigns-History","t":"15 캠페인 관리 · 운영이력","g":"모바일 390","w":390,"h":2168,"r":0},{"id":"M-Campaigns-Slots","t":"16 캠페인 관리 · 슬롯 관리","g":"모바일 390","w":390,"h":2165,"r":0},{"id":"M-Campaigns-Detail","t":"17 캠페인 상세 드로어","g":"모바일 390","w":390,"h":844,"r":0},{"id":"M-Settlements","t":"18 정산 관리 · 계정별 집계","g":"모바일 390","w":390,"h":2274,"r":0},{"id":"M-Settlements-Intake","t":"19 정산 관리 · 접수 상세","g":"모바일 390","w":390,"h":2274,"r":0},{"id":"M-Settlements-Refund","t":"20 정산 관리 · 환불 상세","g":"모바일 390","w":390,"h":1815,"r":0},{"id":"M-Tax","t":"21 세금계산서 · 발행 신청","g":"모바일 390","w":390,"h":844,"r":0},{"id":"M-Tax-History","t":"22 세금계산서 · 발행 내역","g":"모바일 390","w":390,"h":844,"r":0},{"id":"M-Accounts","t":"23 계정 관리","g":"모바일 390","w":390,"h":1220,"r":0},{"id":"M-Products","t":"24 상품 관리 · 상품 목록","g":"모바일 390","w":390,"h":2820,"r":0},{"id":"M-Products-Schedule","t":"25 상품 관리 · 운영 일정","g":"모바일 390","w":390,"h":2221,"r":0},{"id":"M-Products-Notice","t":"26 상품 관리 · 운영 공지","g":"모바일 390","w":390,"h":1351,"r":0},{"id":"M-Notices","t":"27 공지사항","g":"모바일 390","w":390,"h":844,"r":0},{"id":"M-Notices-Detail","t":"28 공지 상세","g":"모바일 390","w":390,"h":844,"r":0},{"id":"M-Profile","t":"29 내 정보","g":"모바일 390","w":390,"h":1119,"r":0},{"id":"M-Admin","t":"30 어드민","g":"모바일 390","w":390,"h":2886,"r":0},{"id":"M-Guide","t":"31 파트너 이용 가이드","g":"모바일 390","w":390,"h":844,"r":0},{"id":"M-Logout","t":"32 로그아웃 확인","g":"모바일 390","w":390,"h":844,"r":0},{"id":"M-Components","t":"33 토큰 · 공통 컴포넌트","g":"모바일 390","w":390,"h":8078,"r":0}];
+const byId = {}; SCREENS.forEach((s, i) => { s.i = i; byId[s.id] = s; });
+const frame = document.querySelector('.frame'), ifr = document.querySelector('iframe');
+const grp = document.querySelector('.grp'), ttl = document.querySelector('.ttl'), count = document.querySelector('.count');
+const prev = document.querySelector('.prev'), next = document.querySelector('.next'), open = document.querySelector('.open');
+let cur = null;
+const idOf = (href) => { const m = /\/screens\/([^\/?#]+)\.html/.exec(href || ''); return m ? decodeURIComponent(m[1]) : null; };
+function fit() {
+  if (!cur) return;
+  const avail = Math.max(240, document.querySelector('.stage').clientWidth - 32);
+  const k = Math.min(1, avail / cur.w);
+  ifr.style.width = cur.w + 'px'; ifr.style.height = cur.h + 'px'; ifr.style.transform = 'scale(' + k + ')';
+  frame.style.width = Math.round(cur.w * k) + 'px'; frame.style.height = Math.round(cur.h * k) + 'px';
+  frame.style.borderRadius = (cur.r ? Math.round(cur.r * k) : 6) + 'px';
+}
+function show(id, fromFrame) {
+  const s = byId[id] || SCREENS[0];
+  cur = s;
+  grp.textContent = s.g; ttl.textContent = s.t;
+  count.textContent = (s.i + 1) + ' / ' + SCREENS.length;
+  prev.disabled = s.i === 0; next.disabled = s.i === SCREENS.length - 1;
+  open.href = 'screens/' + encodeURIComponent(s.id) + '.html';
+  document.title = s.t + ' · TURTLE 파트너 워크스페이스';
+  history.replaceState(null, '', '?s=' + encodeURIComponent(s.id));
+  if (!fromFrame) ifr.src = 'screens/' + encodeURIComponent(s.id) + '.html';
+  fit();
+}
+function onKey(e) {
+  if (e.target && e.target.closest && e.target.closest('input,textarea,select,[contenteditable]')) return;
+  if (e.key === 'ArrowLeft') prev.click();
+  if (e.key === 'ArrowRight') next.click();
+}
+ifr.addEventListener('load', () => {
+  let id = null;
+  try { id = idOf(ifr.contentWindow.location.pathname); ifr.contentDocument.addEventListener('keydown', onKey); } catch (e) {}
+  if (id && byId[id] && (!cur || id !== cur.id)) show(id, true);
+});
+prev.addEventListener('click', () => cur && cur.i > 0 && show(SCREENS[cur.i - 1].id));
+next.addEventListener('click', () => cur && cur.i < SCREENS.length - 1 && show(SCREENS[cur.i + 1].id));
+document.addEventListener('keydown', onKey);
+window.addEventListener('resize', fit);
+show(new URLSearchParams(location.search).get('s'));
+</script>
+</body>
+</html>
